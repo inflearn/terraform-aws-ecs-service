@@ -20,14 +20,14 @@ variable "security_groups" {
   default = []
 }
 
-variable "services" {
-  type    = any
-  default = null
-}
-
 variable "region" {
   type    = string
   default = "ap-northeast-2"
+}
+
+variable "services" {
+  type    = any
+  default = null
 }
 
 variable "tags" {

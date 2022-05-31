@@ -50,12 +50,12 @@ resource "aws_ecs_service" "this" {
   }
 
   dynamic "network_configuration" {
-    for_each = try(each.value.network_configurations, [])
+    for_each = try(each.value.network_configuration, null) != null ? [1] : []
 
     content {
       subnets          = var.subnets
       security_groups  = var.security_groups
-      assign_public_ip = try(network_configuration.value.assign_public_ip, false)
+      assign_public_ip = try(each.value.network_configuration.assign_public_ip, false)
     }
   }
 

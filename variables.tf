@@ -6,10 +6,6 @@ variable "cluster_name" {
   type = string
 }
 
-variable "task_definition_arn" {
-  type = string
-}
-
 variable "subnets" {
   type    = list(string)
   default = []

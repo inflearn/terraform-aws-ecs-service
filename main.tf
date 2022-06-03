@@ -6,7 +6,7 @@ resource "aws_ecs_service" "this" {
   for_each                           = {for i, s in var.services : i => s}
   name                               = each.value.name
   cluster                            = var.cluster_id
-  task_definition                    = var.task_definition_arn
+  task_definition                    = each.value.task_definition
   deployment_minimum_healthy_percent = try(each.value.deployment_minimum_healthy_percent, null)
   deployment_maximum_percent         = try(each.value.deployment_maximum_percent, null)
   scheduling_strategy                = try(each.value.scheduling_strategy, "REPLICA")

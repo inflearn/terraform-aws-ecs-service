@@ -82,14 +82,14 @@ resource "aws_appautoscaling_target" "this" {
   for_each           = {for i, s in var.services : i => s if try(s.enable_autoscaling, true)}
   min_capacity       = try(each.value.min_capacity, 1)
   max_capacity       = coalesce(try(each.value.max_capacity, null), try(each.value.min_capacity, 1))
-  resource_id        = "service/${var.cluster_name}${try(each.value.name, null) == null ? "" : "/${each.value.name}"}"
+  resource_id        = "service/${var.cluster_name}/${each.value.name}"
   scalable_dimension = "ecs:service:DesiredCount"
   service_namespace  = "ecs"
 }
 
 resource "aws_appautoscaling_policy" "this" {
   for_each           = {for i, s in var.services : i => s if try(s.enable_autoscaling, true)}
-  name               = "${var.cluster_name}${try(each.value.name, null) == null ? "" : "-${each.value.name}"}-scaling-policy"
+  name               = "${var.cluster_name}-${each.value.name}-scaling-policy"
   policy_type        = try(each.value.policy_type, "TargetTrackingScaling")
   resource_id        = aws_appautoscaling_target.this[each.key].resource_id
   scalable_dimension = aws_appautoscaling_target.this[each.key].scalable_dimension

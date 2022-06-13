@@ -11,7 +11,6 @@ resource "aws_ecs_service" "this" {
   deployment_maximum_percent         = try(each.value.deployment_maximum_percent, null)
   scheduling_strategy                = try(each.value.scheduling_strategy, "REPLICA")
   health_check_grace_period_seconds  = try(each.value.health_check_grace_period_seconds, null)
-  # iam_role                           = try(each.value.load_balancers, []) != [] ? data.aws_iam_role.service.arn : null
   iam_role                           = var.is_network_mode_awsvpc == true ? null : data.aws_iam_role.service.arn
   wait_for_steady_state              = try(each.value.wait_for_steady_state, true)
   force_new_deployment               = try(each.value.force_new_deployment, false)

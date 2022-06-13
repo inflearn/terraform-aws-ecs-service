@@ -30,3 +30,8 @@ variable "tags" {
   type    = map(string)
   default = {}
 }
+
+variable "is_network_mode_awsvpc" {
+  type    = bool
+  default = false
+}

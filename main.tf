@@ -89,7 +89,7 @@ resource "aws_appautoscaling_target" "this" {
 
 resource "aws_appautoscaling_policy" "this" {
   for_each           = {for i, s in var.services : i => s if try(s.enable_autoscaling, true)}
-  name               = "${var.cluster_name}-${each.value.name}-scaling-policy"
+  name               = "${var.cluster_name}-${each.value.name}"
   policy_type        = try(each.value.policy_type, "TargetTrackingScaling")
   resource_id        = aws_appautoscaling_target.this[each.key].resource_id
   scalable_dimension = aws_appautoscaling_target.this[each.key].scalable_dimension

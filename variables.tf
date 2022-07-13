@@ -35,3 +35,8 @@ variable "is_network_mode_awsvpc" {
   type    = bool
   default = false
 }
+
+variable "launch_type" {
+  type    = string
+  default = null
+}

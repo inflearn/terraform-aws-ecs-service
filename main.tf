@@ -9,6 +9,7 @@ resource "aws_ecs_service" "this" {
   task_definition                    = each.value.task_definition
   deployment_minimum_healthy_percent = try(each.value.deployment_minimum_healthy_percent, null)
   deployment_maximum_percent         = try(each.value.deployment_maximum_percent, null)
+  desired_count                      = try(each.value.desired_count, 1)
   scheduling_strategy                = try(each.value.scheduling_strategy, "REPLICA")
   health_check_grace_period_seconds  = try(each.value.health_check_grace_period_seconds, null)
   iam_role                           = var.is_network_mode_awsvpc == true ? null : data.aws_iam_role.service.arn

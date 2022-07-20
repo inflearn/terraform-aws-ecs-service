@@ -12,7 +12,7 @@ resource "aws_ecs_service" "this" {
   desired_count                      = try(each.value.desired_count, 1)
   scheduling_strategy                = try(each.value.scheduling_strategy, "REPLICA")
   health_check_grace_period_seconds  = try(each.value.health_check_grace_period_seconds, null)
-  iam_role                           = try(each.value.load_balancers, []) == [] || var.is_network_mode_awsvpc ? null : data.aws_iam_role.service.arn
+  iam_role                           = try(each.value.load_balancers, []) == [] || each.value.is_network_mode_awsvpc ? null : data.aws_iam_role.service.arn
   wait_for_steady_state              = try(each.value.wait_for_steady_state, true)
   force_new_deployment               = try(each.value.force_new_deployment, false)
   tags                               = var.tags

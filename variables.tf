@@ -35,3 +35,8 @@ variable "launch_type" {
   type    = string
   default = null
 }
+
+variable "enable_execute_command" {
+  type    = bool
+  default = true
+}

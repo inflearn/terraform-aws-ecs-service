@@ -17,7 +17,7 @@ resource "aws_ecs_service" "this" {
   force_new_deployment               = try(each.value.force_new_deployment, false)
   tags                               = var.tags
   launch_type                        = var.launch_type
-  enable_execute_command             = true
+  enable_execute_command             = var.enable_execute_command
 
   lifecycle {
     ignore_changes = [desired_count, task_definition]

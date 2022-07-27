@@ -3,7 +3,7 @@ data "aws_iam_role" "service" {
 }
 
 resource "aws_ecs_service" "this" {
-  for_each                           = {for i, s in var.services : i => s}
+  for_each                           = { for i, s in var.services : i => s }
   name                               = each.value.name
   cluster                            = var.cluster_id
   task_definition                    = each.value.task_definition
@@ -17,6 +17,7 @@ resource "aws_ecs_service" "this" {
   force_new_deployment               = try(each.value.force_new_deployment, false)
   tags                               = var.tags
   launch_type                        = var.launch_type
+  enable_execute_command             = var.enable_execute_command
 
   lifecycle {
     ignore_changes = [desired_count, task_definition]
@@ -81,7 +82,7 @@ resource "aws_ecs_service" "this" {
 
 resource "aws_appautoscaling_target" "this" {
   depends_on         = [aws_ecs_service.this]
-  for_each           = {for i, s in var.services : i => s if try(s.enable_autoscaling, true)}
+  for_each           = { for i, s in var.services : i => s if try(s.enable_autoscaling, true) }
   min_capacity       = try(each.value.min_capacity, 1)
   max_capacity       = coalesce(try(each.value.max_capacity, null), try(each.value.min_capacity, 1))
   resource_id        = "service/${var.cluster_name}/${each.value.name}"
@@ -90,7 +91,7 @@ resource "aws_appautoscaling_target" "this" {
 }
 
 resource "aws_appautoscaling_policy" "this" {
-  for_each           = {for i, s in var.services : i => s if try(s.enable_autoscaling, true)}
+  for_each           = { for i, s in var.services : i => s if try(s.enable_autoscaling, true) }
   name               = "${var.cluster_name}-${each.value.name}"
   policy_type        = try(each.value.policy_type, "TargetTrackingScaling")
   resource_id        = aws_appautoscaling_target.this[each.key].resource_id

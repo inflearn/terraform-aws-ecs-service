@@ -7,6 +7,8 @@ resource "aws_ecs_service" "this" {
   name                               = each.value.name
   cluster                            = var.cluster_id
   task_definition                    = each.value.task_definition
+  launch_type                        = try(each.value.launch_type, null)
+  enable_execute_command             = try(each.value.enable_execute_command, true)
   deployment_minimum_healthy_percent = try(each.value.deployment_minimum_healthy_percent, null)
   deployment_maximum_percent         = try(each.value.deployment_maximum_percent, null)
   desired_count                      = try(each.value.desired_count, 1)
@@ -16,8 +18,6 @@ resource "aws_ecs_service" "this" {
   wait_for_steady_state              = try(each.value.wait_for_steady_state, true)
   force_new_deployment               = try(each.value.force_new_deployment, false)
   tags                               = var.tags
-  launch_type                        = var.launch_type
-  enable_execute_command             = var.enable_execute_command
 
   lifecycle {
     ignore_changes = [desired_count, task_definition]
